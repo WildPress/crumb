@@ -227,10 +227,6 @@ class Crumb
             );
         }
 
-        $type = get_post_type_object(
-            get_post_type()
-        );
-
         if (! empty($type)) {
 
             $ancestors = collect(
