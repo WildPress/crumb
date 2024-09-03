@@ -232,11 +232,26 @@ class Crumb
         );
 
         if (! empty($type)) {
-            $this->add(
-                $type->label,
-                get_post_type_archive_link($type->name),
-                get_queried_object_id()
-            );
+
+            $ancestors = collect(
+                get_ancestors(get_the_ID(), get_post_type())
+            )->reverse();
+
+            if ($ancestors->isNotEmpty()) {
+                $ancestors->each(function ($item) {
+                    $this->add(
+                        get_the_title($item),
+                        get_permalink($item),
+                        $item
+                    );
+                });
+            } else {
+                $this->add(
+                    $type->label,
+                    get_post_type_archive_link($type->name),
+                    get_queried_object_id()
+                );
+            }
         }
 
         return $this->add(
